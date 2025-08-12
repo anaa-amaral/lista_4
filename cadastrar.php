@@ -3,6 +3,7 @@
 include("conexao.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
     $nome = $_POST["nome"];
     $email = $_POST["email"]
 
@@ -10,14 +11,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $res = mysqli_query($conn, $sql);
     if ($res) {
         echo "Usuário cadastrado com sucesso!";
-    else
+    }else{
         echo "Erro ao cadastrar!";
+    }
 }
 
 ?>
 
-<form method="POST">
-    Nome: <input type="text" name="nome"><br>
-    Email: <input type="email" name="email"><br>
-    <input type="submit" value="Cadastrar">
-</form>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form method="POST" action="create.php">
+
+        <label for="name">Nome:</label>
+        <input type="text" name="name" required>
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" required>
+
+        <input type="submit" value="Adicionar">
+
+    </form>
+
+    <a href="index.php">Ver registros.</a>
+</body>
+</html>
