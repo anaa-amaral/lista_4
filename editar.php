@@ -3,22 +3,55 @@
 include("conexao.php");
 
 $id = $_GET["id"];
-$sql = "SELECT * FROM usuarios WHERE id = $id";
-$res = mysqli_query($conn, $sql);
-$dado = mysqli_fetch_assoc($res);
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nome = $_POST["nome"];
-    $email = $_POST["email"];
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  
+    $nome = $_POST['nome'];
+    $email = $_POST['email'];
 
     $sql = "UPDATE usuarios SET nome='$nome', email='$email' WHERE id=$id";
-    mysqli_query($conn, $sql);
-    header("Location: index.php");
+
+  if ($conn->query($sql) === true) {
+        echo "Registro atualizado com sucesso.
+        <a href='index.php'>Ver registros.</a>
+        ";
+    } else {
+        echo "Erro " . $sql . '<br>' . $conn->error;
+    }
+    $conn->close();
+    exit();  
 }
+
+$sql = "SELECT * FROM usuarios WHERE id = $id";
+$res = mysqli_query($conn, $sql);
+$row = $result -> fetch_assoc();
+
 ?>
 
-<form method="POST">
-    Nome: <input type="text" name="nome" value="<?= $dado['nome'] ?>"><br>
-    Email: <input type="email" name="email" value="<?= $dado['email'] ?>"><br>
-    <input type="submit" value="Salvar">
-</form>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+</head>
+
+<body>
+
+    <form method="POST" action="editar.php?id=<?php echo $row['id'];?>">
+
+        <label for="name">Nome:</label>
+        <input type="text" name="nome" value="<?php echo $row['nome'];?>" required>
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" value="<?php echo $row['email'];?>" required>
+
+        <input type="submit" value="Atualizar">
+
+    </form>
+
+    <a href="index.php">Ver registros.</a>
+
+</body>
+
+</html>
